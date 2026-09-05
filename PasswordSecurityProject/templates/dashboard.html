@@ -1,0 +1,31 @@
+@app.route('/dashboard')
+def dashboard():
+
+    conn = sqlite3.connect('passwords.db')
+
+    cursor = conn.cursor()
+
+    # Total Passwords Checked
+    cursor.execute(
+        "SELECT COUNT(*) FROM password_logs"
+    )
+
+    total = cursor.fetchone()[0]
+
+    # Average Password Score
+    cursor.execute(
+        "SELECT AVG(score) FROM password_logs"
+    )
+
+    average_score = cursor.fetchone()[0]
+
+    conn.close()
+
+    return render_template(
+
+        'dashboard.html',
+
+        total=total,
+
+        average_score=round(average_score, 2)
+    )

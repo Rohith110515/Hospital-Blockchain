@@ -1,0 +1,68 @@
+name: Hospital Blockchain CI
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  blockchain-test:
+    name: Smart Contract Test
+    runs-on: ubuntu-latest
+
+    steps:
+      # Downloads your GitHub repository into the GitHub Actions runner
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Installs Node.js version 20
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Installs dependencies required for the Hardhat blockchain project
+      - name: Install Blockchain Dependencies
+        working-directory: ./blockchain
+        run: npm ci
+
+      # Compiles the Solidity smart contracts
+      - name: Compile Smart Contracts
+        working-directory: ./blockchain
+        run: npx hardhat compile
+
+      # Runs the Hardhat smart contract tests
+      - name: Run Smart Contract Tests
+        working-directory: ./blockchain
+        run: npx hardhat test
+
+
+  frontend-build:
+    name: Frontend Build Test
+    runs-on: ubuntu-latest
+
+    steps:
+      # Downloads the repository for this job
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Installs Node.js for the React frontend
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Installs React frontend dependencies
+      - name: Install Frontend Dependencies
+        working-directory: ./blockchain/frontend
+        run: npm ci
+
+      # Creates a production build and checks for build errors
+      - name: Build Frontend
+        working-directory: ./blockchain/frontend
+        run: npm run build

@@ -16,27 +16,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Downloads your GitHub repository into the GitHub Actions runner
+
+      # Download the repository
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Installs Node.js version 20
+      # Install Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # Installs dependencies required for the Hardhat blockchain project
+      # Install blockchain dependencies
       - name: Install Blockchain Dependencies
         working-directory: ./blockchain
-        run: npm ci
+        run: npm install --legacy-peer-deps
 
-      # Compiles the Solidity smart contracts
+      # Compile Solidity smart contracts
       - name: Compile Smart Contracts
         working-directory: ./blockchain
         run: npx hardhat compile
 
-      # Runs the Hardhat smart contract tests
+      # Run smart contract tests
       - name: Run Smart Contract Tests
         working-directory: ./blockchain
         run: npx hardhat test
@@ -47,22 +48,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Downloads the repository for this job
+
+      # Download the repository
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Installs Node.js for the React frontend
+      # Install Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # Installs React frontend dependencies
+      # Install frontend dependencies
       - name: Install Frontend Dependencies
         working-directory: ./blockchain/frontend
-        run: npm ci
+        run: npm install --legacy-peer-deps
 
-      # Creates a production build and checks for build errors
+      # Build React application
       - name: Build Frontend
         working-directory: ./blockchain/frontend
         run: npm run build
